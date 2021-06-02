@@ -11,22 +11,22 @@
         }
         
         struct ParserContext {
-            public tokenScanner: ITokenScanner
-            public tokenMatcher: ITokenMatcher
-            public tokenQueue: Queue<Token>
-            public errors: [ParserException]
+            public var tokenScanner: ITokenScanner
+            public var tokenMatcher: ITokenMatcher
+            public var tokenQueue: Queue<Token>
+            public var errors: [ParserException]
         }
 
         struct Queue<T> {
             var list = [T]()
 
-            var count { 
+            var count: Int { 
                 get {
                     return list.count
                 }
             }
             mutating func enqueue(item: T) {
-                list.append(element)
+                list.append(item)
             }
 
             mutating func dequeue() -> T? {
@@ -69,7 +69,7 @@
                 state = matchToken(state: state, token, ctx: context)
             } while !token.isEOF
 
-            endRule(ctx: ctx, type: RuleType.GherkinDocument)
+            endRule(ctx: context, type: RuleType.GherkinDocument)
 
             if ctx.errors.count > 0 {
                 throw ParserError.compositeParserException(errors: ctx.errors))
@@ -4806,7 +4806,7 @@ for t in queue {
         }
             }
 
-    public protocol AstBuilder 
+    public protocol IAstBuilder 
     {
         associatedtype T
         func build(token: Token)
@@ -4816,12 +4816,12 @@ for t in queue {
         func reset()
     }
 
-    public protocol TokenScanner
+    public protocol ITokenScanner
     {
         func read() -> Token
     }
 
-    public protocol TokenMatcher
+    public protocol ITokenMatcher
     {
         func matchEOF(token: Token) -> Bool
         func matchEmpty(token: Token) -> Bool
