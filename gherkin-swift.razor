@@ -135,12 +135,11 @@
 
             do {
                 return action()
-            } catch err: ParserError.compositeParserError {
-                for error in err.errors {
-                    addError(ctx: ctx, error: error)
+            } catch ParserError.compositeParserError {
+                for e in error.errors {
+                    addError(ctx: ctx, error: e)
                 }
-            }
-            catch (err: ParserError)
+            } catch ParserError
             {
                 addError(ctx: ctx, error: error);
             }
