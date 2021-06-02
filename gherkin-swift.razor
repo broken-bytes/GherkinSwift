@@ -116,13 +116,13 @@
             if ctx.errors.contains($0.message == error.message)) { return }
                 
             ctx.errors.add(error: error)
-            if context.ctx.count > 10 {
+            if ctx.errors.count > 10 {
                 throw ParserError.compositeParserException(errors: ctx.errors)
             }
         }
 
         private func handleAstError(ctx: ParserContext, action: @@escaping () -> Void) {
-            handleExternalError(ctx: context) { 
+            handleExternalError(ctx: ctx) { 
                 action()
                 return true 
             }
@@ -148,20 +148,20 @@
         }
 
         func build(ctx: ParserContext, token: Token) {
-            handleAstError(ctx: context) {
+            handleAstError(ctx: ctx) {
                 self.astBuilder.build(token: token)
             }
         }
 
-        func startRule(context: ParserContext, type: RuleType) {
-            handleAstError(ctx: context) {
-                this.astBuilder.startRule(type: ruleType)
+        func startRule(ctx: ParserContext, type: RuleType) {
+            handleAstError(ctx: ctx) {
+                self.astBuilder.startRule(type: ruleType)
             }
         }
 
         func endRule(ctx: ParserContext, type: RuleType) {
-            handleAstError(ctx: context) {
-                this.astBuilder.endRule(ruleType)
+            handleAstError(ctx: ctx) {
+                self.astBuilder.endRule(ruleType)
             }
         }
 
@@ -169,7 +169,7 @@
             return self.astBuilder.getResult()
         }
 
-        func ReadToken(ctx: ParserContext) -> Token {
+        func readToken(ctx: ParserContext) -> Token {
             return ctx.tokenQueue.count > 0 ? ctx.tokenQueue.dequeue() : ctx.tokenScanner.read()
         }
 
@@ -180,7 +180,7 @@
             {
             @:if (token.IsEOF) return false;
             }
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.match@(rule.Name.Replace("#", ""))(token: token), defaultValue: false)
             } 
         }</text>
@@ -213,7 +213,7 @@
             @:{
                 if (transition.LookAheadHint != null)
                 {
-                @:if LookAhead@(transition.LookAheadHint.Id)(ctx: context, token: token)
+                @:if LookAhead@(transition.LookAheadHint.Id)(ctx: ctx, token: token)
                 @:{
                 }
                 foreach(var production in transition.Productions)
@@ -242,7 +242,7 @@
             var queue = Queue<Token>()
             var match = false
             repeat {
-                token = readToken(ctx: context)
+                token = readToken(ctx: ctx)
                 token.detach()
                 queue.enqueue(item: token)
 

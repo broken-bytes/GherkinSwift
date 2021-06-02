@@ -82,13 +82,13 @@
             if ctx.errors.contains($0.message == error.message)) { return }
                 
             ctx.errors.add(error: error)
-            if context.ctx.count > 10 {
+            if ctx.errors.count > 10 {
                 throw ParserError.compositeParserException(errors: ctx.errors)
             }
         }
 
         private func handleAstError(ctx: ParserContext, action: @escaping () -> Void) {
-            handleExternalError(ctx: context) { 
+            handleExternalError(ctx: ctx) { 
                 action()
                 return true 
             }
@@ -114,20 +114,20 @@
         }
 
         func build(ctx: ParserContext, token: Token) {
-            handleAstError(ctx: context) {
+            handleAstError(ctx: ctx) {
                 self.astBuilder.build(token: token)
             }
         }
 
-        func startRule(context: ParserContext, type: RuleType) {
-            handleAstError(ctx: context) {
-                this.astBuilder.startRule(type: ruleType)
+        func startRule(ctx: ParserContext, type: RuleType) {
+            handleAstError(ctx: ctx) {
+                self.astBuilder.startRule(type: ruleType)
             }
         }
 
         func endRule(ctx: ParserContext, type: RuleType) {
-            handleAstError(ctx: context) {
-                this.astBuilder.endRule(ruleType)
+            handleAstError(ctx: ctx) {
+                self.astBuilder.endRule(ruleType)
             }
         }
 
@@ -135,91 +135,91 @@
             return self.astBuilder.getResult()
         }
 
-        func ReadToken(ctx: ParserContext) -> Token {
+        func readToken(ctx: ParserContext) -> Token {
             return ctx.tokenQueue.count > 0 ? ctx.tokenQueue.dequeue() : ctx.tokenScanner.read()
         }
 
 
         func matchEOF(ctx: ParserContext, token: Token) -> Bool {
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchEOF(token: token), defaultValue: false)
             } 
         }
         func matchEmpty(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchEmpty(token: token), defaultValue: false)
             } 
         }
         func matchComment(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchComment(token: token), defaultValue: false)
             } 
         }
         func matchTagLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchTagLine(token: token), defaultValue: false)
             } 
         }
         func matchFeatureLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchFeatureLine(token: token), defaultValue: false)
             } 
         }
         func matchRuleLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchRuleLine(token: token), defaultValue: false)
             } 
         }
         func matchBackgroundLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchBackgroundLine(token: token), defaultValue: false)
             } 
         }
         func matchScenarioLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchScenarioLine(token: token), defaultValue: false)
             } 
         }
         func matchExamplesLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchExamplesLine(token: token), defaultValue: false)
             } 
         }
         func matchStepLine(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchStepLine(token: token), defaultValue: false)
             } 
         }
         func matchDocStringSeparator(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchDocStringSeparator(token: token), defaultValue: false)
             } 
         }
         func matchTableRow(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchTableRow(token: token), defaultValue: false)
             } 
         }
         func matchLanguage(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchLanguage(token: token), defaultValue: false)
             } 
         }
         func matchOther(ctx: ParserContext, token: Token) -> Bool {
             if (token.IsEOF) return false;
-            return handleExternalError(ctx: context) {
+            return handleExternalError(ctx: ctx) {
                 ctx.tokenMatcher.matchOther(token: token), defaultValue: false)
             } 
         }
@@ -548,7 +548,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.FeatureHeader)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -631,7 +631,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.FeatureHeader)
@@ -714,7 +714,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.FeatureHeader)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -797,7 +797,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Background)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -879,7 +879,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Background)
@@ -961,7 +961,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Background)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -1048,7 +1048,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 endRule(ctx: context, type: RuleType.Background)
@@ -1139,7 +1139,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -1277,7 +1277,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
                 startRule(ctx: context, type: RuleType.Tags)
@@ -1287,7 +1287,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Scenario)
                 endRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -1381,7 +1381,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -1392,7 +1392,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Scenario)
@@ -1487,7 +1487,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
                 startRule(ctx: context, type: RuleType.Tags)
@@ -1497,7 +1497,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Scenario)
                 endRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -1596,7 +1596,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -1607,7 +1607,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 endRule(ctx: context, type: RuleType.Scenario)
@@ -1711,7 +1711,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -1723,7 +1723,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -1876,7 +1876,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -1888,7 +1888,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -1994,7 +1994,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -2007,7 +2007,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -2114,7 +2114,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -2126,7 +2126,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -2223,7 +2223,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.ExamplesTable)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -2236,7 +2236,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.ExamplesTable)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -2392,7 +2392,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.RuleHeader)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -2478,7 +2478,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.RuleHeader)
@@ -2564,7 +2564,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.RuleHeader)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -2650,7 +2650,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Background)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -2735,7 +2735,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Background)
@@ -2820,7 +2820,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Background)
                 startRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -2910,7 +2910,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 endRule(ctx: context, type: RuleType.Background)
@@ -3004,7 +3004,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -3145,7 +3145,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
                 startRule(ctx: context, type: RuleType.Tags)
@@ -3155,7 +3155,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Scenario)
                 endRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -3252,7 +3252,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -3263,7 +3263,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Scenario)
@@ -3361,7 +3361,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
                 startRule(ctx: context, type: RuleType.Tags)
@@ -3371,7 +3371,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Scenario)
                 endRule(ctx: context, type: RuleType.ScenarioDefinition)
@@ -3473,7 +3473,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 startRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -3484,7 +3484,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Step)
                 endRule(ctx: context, type: RuleType.Scenario)
@@ -3591,7 +3591,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -3603,7 +3603,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DataTable)
                 endRule(ctx: context, type: RuleType.Step)
@@ -3759,7 +3759,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -3771,7 +3771,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -3880,7 +3880,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -3893,7 +3893,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Description)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -4003,7 +4003,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -4015,7 +4015,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.Examples)
                 endRule(ctx: context, type: RuleType.ExamplesDefinition)
@@ -4115,7 +4115,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.ExamplesTable)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -4128,7 +4128,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.ExamplesTable)
                 endRule(ctx: context, type: RuleType.Examples)
@@ -4269,7 +4269,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4281,7 +4281,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4416,7 +4416,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4538,7 +4538,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead1(ctx: context, token: token)
+                if LookAhead1(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4550,7 +4550,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4682,7 +4682,7 @@
             }
             if (matchTagLine(ctx: context, token: token))
             {
-                if LookAhead0(ctx: context, token: token)
+                if LookAhead0(ctx: ctx, token: token)
                 {
                 endRule(ctx: context, type: RuleType.DocString)
                 endRule(ctx: context, type: RuleType.Step)
@@ -4758,7 +4758,7 @@
             var queue = Queue<Token>()
             var match = false
             repeat {
-                token = readToken(ctx: context)
+                token = readToken(ctx: ctx)
                 token.detach()
                 queue.enqueue(item: token)
 
@@ -4785,7 +4785,7 @@ for t in queue {
             var queue = Queue<Token>()
             var match = false
             repeat {
-                token = readToken(ctx: context)
+                token = readToken(ctx: ctx)
                 token.detach()
                 queue.enqueue(item: token)
 
