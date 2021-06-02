@@ -5,13 +5,13 @@
     switch(production.Type)
     {
         case ProductionRuleType.Start:
-                @:startRule(ctx: context, type: RuleType.@production.RuleName)
+                @:startRule(ctx: ctx, type: RuleType.@production.RuleName)
             break;
         case ProductionRuleType.End:
-                @:endRule(ctx: context, type: RuleType.@production.RuleName)
+                @:endRule(ctx: ctx, type: RuleType.@production.RuleName)
             break;
         case ProductionRuleType.Process:
-                @:build(ctx: context, token: token)
+                @:build(ctx: ctx, token: token)
             break;
     }
 }
@@ -27,12 +27,12 @@
                 throw error
             }
             
-            addError(ctx: context, error: error)
+            addError(ctx: ctx, error: error)
 
             return @state.Id
 </text>}
 @helper MatchToken(TokenType tokenType)
-{<text>match@(tokenType)(ctx: context, token: token)</text>}
+{<text>match@(tokenType)(ctx: ctx, token: token)</text>}
 
     public class @Model.ParserClassName<T> {
         private astBuilder: IAstBuilder
@@ -235,7 +235,7 @@
     @foreach(var lookAheadHint in Model.RuleSet.LookAheadHints)
     {
         <text>
-        lookAhead@(lookAheadHint.Id)(ctx: ParserContext, currentToken: Token) -> Bool
+        func lookAhead@(lookAheadHint.Id)(ctx: ParserContext, currentToken: Token) -> Bool
         {
             currentToken.detach()
             var token: Token
