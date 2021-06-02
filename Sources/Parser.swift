@@ -94,7 +94,7 @@
             }
         }
 
-        private func handleExternalError<T>(ctx: ParserContext, defaultValue: T = T(), action: @escaping () -> T) -> T {
+        private func handleExternalError<T>(ctx: ParserContext, defaultValue: T = T(), action: @escaping () throws -> T) -> T {
             if stopAtFirstError {
                 return action()
             }
@@ -105,8 +105,7 @@
                 for e in error.errors {
                     addError(ctx: ctx, error: e)
                 }
-            } catch ParserError
-            {
+            } catch {
                 addError(ctx: ctx, error: error);
             }
             return defaultValue;
