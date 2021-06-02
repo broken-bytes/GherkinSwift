@@ -88,7 +88,7 @@
         }
 
         private func handleAstError(ctx: ParserContext, action: @escaping () -> Void) {
-            handleExternalError(ctx: ctx) { 
+            handleExternalError(ctx: ctx) { () -> Bool in 
                 action()
                 return true 
             }
@@ -99,16 +99,16 @@
                 return action()
             }
 
-            try {
+            do {
                 return action()
-            } catch (err: ParserError.compositeParserError) {
-                for error in err.errors) {
-                    addError(ctx: context, error: error)
+            } catch err: ParserError.compositeParserError {
+                for error in err.errors {
+                    addError(ctx: ctx, error: error)
                 }
             }
             catch (err: ParserError)
             {
-                addError(ctx: context, error: error);
+                addError(ctx: ctx, error: error);
             }
             return defaultValue;
         }
@@ -141,86 +141,86 @@
 
 
         func matchEOF(ctx: ParserContext, token: Token) -> Bool {
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchEOF(token: token), defaultValue: false)
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchEOF(token: token)
             } 
         }
         func matchEmpty(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchEmpty(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchEmpty(token: token)
             } 
         }
         func matchComment(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchComment(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchComment(token: token)
             } 
         }
         func matchTagLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchTagLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchTagLine(token: token)
             } 
         }
         func matchFeatureLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchFeatureLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchFeatureLine(token: token)
             } 
         }
         func matchRuleLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchRuleLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchRuleLine(token: token)
             } 
         }
         func matchBackgroundLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchBackgroundLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchBackgroundLine(token: token)
             } 
         }
         func matchScenarioLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchScenarioLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchScenarioLine(token: token)
             } 
         }
         func matchExamplesLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchExamplesLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchExamplesLine(token: token)
             } 
         }
         func matchStepLine(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchStepLine(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchStepLine(token: token)
             } 
         }
         func matchDocStringSeparator(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchDocStringSeparator(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchDocStringSeparator(token: token)
             } 
         }
         func matchTableRow(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchTableRow(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchTableRow(token: token)
             } 
         }
         func matchLanguage(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchLanguage(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchLanguage(token: token)
             } 
         }
         func matchOther(ctx: ParserContext, token: Token) -> Bool {
-            if (token.IsEOF) return false;
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.matchOther(token: token), defaultValue: false)
+            if token.isEOF  { return false }
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.matchOther(token: token)
             } 
         }
         public func matchToken(state: Int, token: Token, ctx: ParserContext) -> Int {

@@ -122,7 +122,7 @@
         }
 
         private func handleAstError(ctx: ParserContext, action: @@escaping () -> Void) {
-            handleExternalError(ctx: ctx) { 
+            handleExternalError(ctx: ctx) { () -> Bool in 
                 action()
                 return true 
             }
@@ -133,16 +133,16 @@
                 return action()
             }
 
-            try {
+            do {
                 return action()
-            } catch (err: ParserError.compositeParserError) {
-                for error in err.errors) {
-                    addError(ctx: context, error: error)
+            } catch err: ParserError.compositeParserError {
+                for error in err.errors {
+                    addError(ctx: ctx, error: error)
                 }
             }
             catch (err: ParserError)
             {
-                addError(ctx: context, error: error);
+                addError(ctx: ctx, error: error);
             }
             return defaultValue;
         }
@@ -178,10 +178,10 @@
         func match@(rule.Name.Replace("#", ""))(ctx: ParserContext, token: Token) -> Bool {
             @if (rule.Name != "#EOF")
             {
-            @:if (token.IsEOF) return false;
+            @:if token.isEOF  { return false }
             }
-            return handleExternalError(ctx: ctx) {
-                ctx.tokenMatcher.match@(rule.Name.Replace("#", ""))(token: token), defaultValue: false)
+            return handleExternalError(ctx: ctx, defaultValue: false) {
+                ctx.tokenMatcher.match@(rule.Name.Replace("#", ""))(token: token)
             } 
         }</text>
         }
