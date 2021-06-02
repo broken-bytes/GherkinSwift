@@ -10,7 +10,7 @@
             case invalidOperationException(message: String)
         }
         
-        struct ParserContext {
+        class ParserContext {
             public var tokenScanner: ITokenScanner
             public var tokenMatcher: ITokenMatcher
             public var tokenQueue: Queue<Token>
@@ -96,11 +96,11 @@
 
         private func handleExternalError<T>(ctx: ParserContext, defaultValue: T = T(), action: @escaping () throws -> T) -> T {
             if stopAtFirstError {
-                return action()
+                try! return action()
             }
 
             do {
-                return action()
+                try return action()
             } catch ParserError.compositeParserError {
                 for e in error.errors {
                     addError(ctx: ctx, error: e)
