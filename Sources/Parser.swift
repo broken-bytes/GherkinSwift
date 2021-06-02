@@ -1,7 +1,7 @@
 ﻿// - Mark: Generated Code
 
     public class Parser<T> {
-        private astBuilder: IAstBuilder
+        private var astBuilder: IAstBuilder
         
         enum ParserError: Error {
             case unexpectedTokenError(token: Token, expected [String], comment: String)
@@ -14,7 +14,7 @@
             public var tokenScanner: ITokenScanner
             public var tokenMatcher: ITokenMatcher
             public var tokenQueue: Queue<Token>
-            public var errors: [ParserException]
+            public var errors: [ParserError]
         }
 
         struct Queue<T> {
@@ -56,10 +56,10 @@
             tokenMatcher.reset()
             astBuilder.reset()
             var context = ParserContext(
-                tokenScanner = tokenScanner,
-                tokenMatcher = tokenMatcher,
-                tokenQueue = Queue<Token>(),
-                errors = [ParserError]())
+                tokenScanner: tokenScanner,
+                tokenMatcher: tokenMatcher,
+                tokenQueue: Queue<Token>(),
+                errors: [ParserError]())
 
             startRule(ctx: context, type: RuleType.GherkinDocument)
             var tate = 0
